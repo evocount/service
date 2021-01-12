@@ -1,0 +1,38 @@
+{
+	"name": "@evocount/service",
+	"version": "0.0.0",
+	"description": "A small framework to write a webservice.",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "npx tsc",
+		"build:production": "npx tsc",
+		"clean": "rm -r build",
+		"start": "npx nodemon src/index.ts",
+		"lint": "npx eslint src",
+		"test": "npm run test:types && npm run test:lint",
+		"test:lint": "npm run lint",
+		"test:types": "npx tsc --noEmit"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/evocount/service.git"
+	},
+	"author": "EvoCount GmbH",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/evocount/service/issues"
+	},
+	"homepage": "https://github.com/evocount/service#readme",
+	"dependencies": {
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.10",
+		"@typescript-eslint/eslint-plugin": "^4.13.0",
+		"@typescript-eslint/parser": "^4.13.0",
+		"eslint": "^7.17.0",
+		"nodemon": "^2.0.7",
+		"tslint": "^6.1.3",
+		"typescript": "^4.1.3"
+	}
+}
