@@ -26,6 +26,10 @@ export class Service {
 		this.routes.push(route.to_express())
 	}
 
+	load_settings(): Promise<Settings> {
+		return load_settings(this.name)
+	}
+
 	async run(): Promise<void> {
 		const settings = await load_settings(this.name)
 		const logger = create_logger(settings.get_logger())
