@@ -1,6 +1,6 @@
 {
 	"name": "@evocount/service",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "A small framework to write a webservice.",
 	"main": "build/index.js",
 	"scripts": {
