@@ -33,8 +33,8 @@ export const load = async (name: string): Promise<Settings> => {
 	//paths where to search for config files
 	const paths = [
 		`/etc/${ name }rc.json`,
-		`~/${ name }rc.json`,
-		`${ name }rc.json`
+		`~/.${ name }rc.json`,
+		`.${ name }rc.json`
 	]
 
 	//load the config files
