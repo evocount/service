@@ -9,5 +9,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "build",
 		"declaration": true
-	}
+	},
+	"include": [ "src/**/*" ]
 }
