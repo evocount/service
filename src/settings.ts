@@ -1,3 +1,5 @@
+import merge from "deepmerge"
+
 export interface ServerSettings {
 	port: number
 }
@@ -26,4 +28,12 @@ export class Settings {
 			level: process.env.LOG_LEVEL || "info"
 		}
 	}
+}
+
+export const load = async (name: string) => {
+	const paths = [
+		`/etc/${ name }rc.json`,
+		`~/${ name }rc.json`,
+		`${ name }rc.json`
+	]
 }
