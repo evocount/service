@@ -11,7 +11,7 @@
 		"test": "npm run test:types && npm run test:lint && npm run test:unit",
 		"test:lint": "npm run lint",
 		"test:types": "npx tsc --noEmit",
-		"test:unit": "ts-mocha test/**/*.ts",
+		"test:unit": "npx ts-mocha 'test/**/*.ts'",
 		"prepare": "npm run clean && npm run build"
 	},
 	"repository": {

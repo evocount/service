@@ -7,22 +7,27 @@ import body_parser from "body-parser"
 
 import create_logger from "./logger"
 import { Settings } from "./settings"
+import { load as load_settings } from "./settings"
 import { Route } from "./route"
 import { HTTPException } from "./exception"
 import { ServerException } from "./exception"
 
 
-export abstract class Service {
-	routes: Array<(request: Request, response: Response, next: NextFunction) => void> = [ ]
+export class Service {
+	name: string
 
-	abstract load_settings(): Promise<Settings>;
+	constructor(name: string) {
+		this.name = name
+	}
+
+	routes: Array<(request: Request, response: Response, next: NextFunction) => void> = [ ]
 
 	add_route<INPUT_T, OUTPUT_T>(route: Route<INPUT_T, OUTPUT_T>): void {
 		this.routes.push(route.to_express())
 	}
 
 	async run(): Promise<void> {
-		const settings = await this.load_settings()
+		const settings = await load_settings(this.name)
 		const logger = create_logger(settings.get_logger())
 
 		const app = express()
