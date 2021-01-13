@@ -29,7 +29,7 @@ export abstract class Route<INPUT_T, OUTPUT_T> {
 				const input = input_validator.validate(request.body, this.schema)
 
 				if(!input.valid) {
-					return next(new ValidationException(input))
+					throw new ValidationException(input)
 				}
 
 				const result = await this.handle(request.body, context) || ""

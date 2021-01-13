@@ -56,13 +56,14 @@ export class Service {
 		}
 
 		//error handler
-		app.use((error: Error, request: Request, response: Response) => {
+		app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
 			logger.error(error)
 			const http_error = error instanceof HTTPException ? error : new ServerException
 			response.status(http_error.status_code())
 			response.json(http_error.json())
 		})
 
+		logger.info(`Listening on port ${ settings.get_server().port }.`)
 		app.listen(settings.get_server().port)
 	}
 }

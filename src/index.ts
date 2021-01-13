@@ -1,3 +1,5 @@
 export { Service } from "./service"
 export { Settings } from "./settings"
+export { load as load_settings } from "./settings"
 export { Context } from "./context"
+export { Route } from "./route"
