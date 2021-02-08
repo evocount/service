@@ -6,8 +6,8 @@ import morgan from "morgan"
 import body_parser from "body-parser"
 
 import create_logger from "./logger"
+import { Logger } from "winston"
 import { Settings } from "./settings"
-import { load as load_settings } from "./settings"
 import { Route } from "./route"
 import { HTTPException } from "./exception"
 import { ServerException } from "./exception"
@@ -15,9 +15,15 @@ import { ServerException } from "./exception"
 
 export class Service {
 	name: string
+	settings: Settings
+	logger: Logger
 
-	constructor(name: string) {
+	constructor(name: string, settings: Settings) {
 		this.name = name
+		this.settings = settings
+		this.logger = create_logger({
+			level: "info"
+		})
 	}
 
 	routes: Array<(request: Request, response: Response, next: NextFunction) => void> = [ ]
@@ -26,26 +32,21 @@ export class Service {
 		this.routes.push(route.to_express())
 	}
 
-	load_settings(): Promise<Settings> {
-		return load_settings(this.name)
-	}
-
 	async run(): Promise<void> {
-		const settings = await load_settings(this.name)
-		const logger = create_logger(settings.get_logger())
+		this.logger = create_logger(this.settings.get_logger())
 
 		const app = express()
 
 		app.use(morgan("combined", {
 			skip: (request: Request) => (request.statusCode || 200) > 400,
 			stream: {
-				write: (message: string) => logger.info(message)
+				write: (message: string) => this.logger.info(message.substring(0, message.length - 1))
 			}
 		}))
 		app.use(morgan("combined", {
 			skip: (request: Request) => (request.statusCode || 200) < 400,
 			stream: {
-				write: (message: string) => logger.error(message)
+				write: (message: string) => this.logger.error(message.substring(0, message.length - 1))
 			}
 		}))
 
@@ -57,13 +58,13 @@ export class Service {
 
 		//error handler
 		app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
-			logger.error(error)
+			this.logger.error(error)
 			const http_error = error instanceof HTTPException ? error : new ServerException
 			response.status(http_error.status_code())
 			response.json(http_error.json())
 		})
 
-		logger.info(`Listening on port ${ settings.get_server().port }.`)
-		app.listen(settings.get_server().port)
+		this.logger.info(`Listening on port ${ this.settings.get_server().port }.`)
+		app.listen(this.settings.get_server().port)
 	}
 }

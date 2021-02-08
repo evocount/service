@@ -17,15 +17,15 @@ export class Settings {
 	}
 
 	get_server(): ServerSettings {
-		return this.base.server as ServerSettings || {
-			port: process.env.PORT || "80"
-		}
+		return merge({
+			port: parseInt(process.env.PORT || "80")
+		}, this.base.server as ServerSettings)
 	}
 
 	get_logger(): LoggerSettings {
-		return this.base.logger as LoggerSettings || {
+		return merge({
 			level: process.env.LOG_LEVEL || "info"
-		}
+		}, this.base.logger as LoggerSettings)
 	}
 }
 
